@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NG Alquileres - Máquinas y Herramientas en el Partido de La Costa</title>
+  <meta name="description" content="Alquiler de andamios, máquinas y herramientas en Ostende, Pinamar y todo el Partido de La Costa. Envíos y presupuestos sin cargo.">
+  
+  <!-- Tipografía Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Iconos FontAwesome v6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Archivo CSS Independiente -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- CABECERA PRINCIPAL -->
+  <header class="navbar">
+    <div class="container navbar-container">
+      <!-- Disparador Secreto (Triple Clic en el Logo) -->
+      <div class="logo-box" id="secretLogoTrigger" title="NG Alquileres">
+        <svg class="brand-logo" viewBox="0 0 320 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="10,20 130,20 68,100" fill="#424242"/>
+          <polygon points="68,100 130,20 130,100" fill="#FFC107"/>
+          <polygon points="80,20 200,20 200,100" fill="#F27A18"/>
+          <text x="215" y="92" font-family="'Poppins', sans-serif" font-weight="800" font-size="82" fill="currentColor">NG</text>
+        </svg>
+      </div>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#inicio" class="nav-link">Inicio</a>
+        <a href="#catalogo" class="nav-link">Catálogo</a>
+        <a href="#requisitos" class="nav-link">Requisitos</a>
+        <a href="#contacto" class="nav-link">Contacto</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button id="themeToggleBtn" class="action-btn" aria-label="Cambiar tema">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+        <button id="mobileMenuBtn" class="action-btn mobile-menu-btn" aria-label="Menú móvil">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main>
+    <!-- SECCIÓN HERO / PRESENTACIÓN -->
+    <section id="inicio" class="hero-section">
+      <div class="container">
+        <div class="hero-badges">
+          <span class="badge"><i class="fa-solid fa-calculator"></i> Presupuestos sin cargo</span>
+          <span class="badge badge-accent"><i class="fa-solid fa-truck-fast"></i> Envíos en todo el Partido de La Costa</span>
+        </div>
+        
+        <h1 class="hero-title">Alquiler de Máquinas,<br>Andamios y Herramientas</h1>
+        <p class="hero-subtitle">Equipamiento profesional y soluciones eficientes para tus obras en todo el Partido de La Costa y Pinamar.</p>
+
+        <div class="hero-actions">
+          <a href="#catalogo" class="btn btn-primary"><i class="fa-solid fa-list-check"></i> Ver Catálogo</a>
+          <a href="#requisitos" class="btn btn-secondary"><i class="fa-solid fa-file-contract"></i> Requisitos</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN CATÁLOGO -->
+    <section id="catalogo" class="catalog-section">
+      <div class="container">
+        <header class="section-header">
+          <h2 class="section-title">Herramientas Disponibles</h2>
+          <p class="section-subtitle">Seleccioná una categoría para filtrar los equipos disponibles.</p>
+        </header>
+
+        <nav class="filter-bar" aria-label="Filtro de categorías">
+          <button class="filter-btn active" data-category="todos">Todos</button>
+          <button class="filter-btn" data-category="maquinaria">Maquinaria</button>
+          <button class="filter-btn" data-category="electricas">Eléctricas</button>
+          <button class="filter-btn" data-category="andamios">Andamios</button>
+          <button class="filter-btn" data-category="limpieza">Limpieza</button>
+        </nav>
+
+        <div class="tools-grid" id="toolsGrid">
+          <!-- Carga dinámica mediante script.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN REQUISITOS -->
+    <section id="requisitos" class="requirements-section">
+      <div class="container">
+        <header class="section-header">
+          <h2 class="section-title">Requisitos de Alquiler</h2>
+          <p class="section-subtitle">Pasos sencillos para alquilar cualquier equipo.</p>
+        </header>
+
+        <div class="requirements-grid">
+          <article class="requirement-card">
+            <span class="req-number">01</span>
+            <div class="req-icon"><i class="fa-solid fa-id-card"></i></div>
+            <h3 class="req-title">DNI Actualizado</h3>
+            <p class="req-desc">Acreditación de identidad mediante DNI original y fotocopia o servicio a su nombre.</p>
+          </article>
+
+          <article class="requirement-card">
+            <span class="req-number">02</span>
+            <div class="req-icon"><i class="fa-solid fa-file-signature"></i></div>
+            <h3 class="req-title">Firma de Acuerdo</h3>
+            <p class="req-desc">Firma del contrato o acuerdo de alquiler con las condiciones del equipo.</p>
+          </article>
+
+          <article class="requirement-card">
+            <span class="req-number">03</span>
+            <div class="req-icon"><i class="fa-solid fa-comments-dollar"></i></div>
+            <h3 class="req-title">Reserva & Envío</h3>
+            <p class="req-desc">Coordinación por WhatsApp. Envíos en todo el Partido de La Costa y Pinamar.</p>
+          </article>
+        </div>
+
+        <aside class="requirements-cta">
+          <h3>¿Tenés dudas sobre las condiciones?</h3>
+          <p>Escribinos por WhatsApp y te asesoramos al instante.</p>
+          <a href="https://wa.me/5492254615250?text=Hola%20NG%20Alquileres,%20tengo%20una%20consulta" target="_blank" rel="noopener" class="btn btn-whatsapp">
+            <i class="fa-brands fa-whatsapp"></i> Consultar por WhatsApp
+          </a>
+        </aside>
+      </div>
+    </section>
+
+    <!-- SECCIÓN CONTACTO -->
+    <section id="contacto" class="contact-section">
+      <div class="container">
+        <header class="section-header">
+          <h2 class="section-title">Contacto & Ubicación</h2>
+        </header>
+
+        <div class="contact-grid">
+          <div class="contact-info">
+            <div class="info-item">
+              <i class="fa-solid fa-location-dot info-icon"></i>
+              <div>
+                <h4>Ubicación</h4>
+                <p>Víctor Hugo 932, Ostende, Pinamar</p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <i class="fa-solid fa-phone info-icon"></i>
+              <div>
+                <h4>Teléfonos</h4>
+                <p><a href="tel:2254615250">2254-615250</a> / <a href="tel:2254416550">2254-416550</a></p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <i class="fa-solid fa-envelope info-icon"></i>
+              <div>
+                <h4>Correo Electrónico</h4>
+                <p><a href="mailto:alquileryventang@gmail.com">alquileryventang@gmail.com</a></p>
+              </div>
+            </div>
+
+            <div class="info-item">
+              <i class="fa-solid fa-share-nodes info-icon"></i>
+              <div>
+                <h4>Redes Sociales</h4>
+                <p><a href="https://www.instagram.com/alquileryventang" target="_blank" rel="noopener">Instagram: @alquileryventang</a></p>
+                <p><a href="https://www.facebook.com" target="_blank" rel="noopener">Facebook: NG alquiler y venta de herramientas</a></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-map">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3184.887292850428!2d-56.8858223!3d-37.1352496!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x959c9d5c808f3223%3A0x2ff307ef05a18a5e!2sV%C3%ADctor%20Hugo%20932%2C%20Ostende%2C%20Provincia%20de%20Buenos%20Aires!5e0!3m2!1ses!2sar!4v1690000000000!5m2!1ses!2sar" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" title="Ubicación NG Alquileres"></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- PIE DE PÁGINA -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 NG Alquiler de Máquinas y Herramientas. Ostende - Partido de La Costa & Pinamar</p>
+    </div>
+  </footer>
+
+  <!-- PANEL MODAL OCULTO DE ADMINISTRACIÓN -->
+  <div class="modal-overlay" id="adminModal" aria-hidden="true">
+    <div class="modal-box">
+      <button class="modal-close" id="closeModalBtn" aria-label="Cerrar panel">&times;</button>
+      <h3 class="modal-title"><i class="fa-solid fa-lock"></i> Panel de Administración</h3>
+      
+      <form id="addToolForm" class="admin-form">
+        <div class="form-group">
+          <label for="toolName">Nombre de la Herramienta</label>
+          <input type="text" id="toolName" placeholder="Ej: Rotomartillo 1500W" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="toolBrand">Marca / Modelo</label>
+            <input type="text" id="toolBrand" placeholder="Ej: Bosch GBH 5-40" required>
+          </div>
+          <div class="form-group">
+            <label for="toolCategory">Categoría</label>
+            <select id="toolCategory" required>
+              <option value="electricas">Eléctricas</option>
+              <option value="maquinaria">Maquinaria</option>
+              <option value="andamios">Andamios</option>
+              <option value="limpieza">Limpieza</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="dayPrice">Precio por Día ($)</label>
+            <input type="text" id="dayPrice" placeholder="$12.000" required>
+          </div>
+          <div class="form-group">
+            <label for="weekPrice">Precio por Semana ($)</label>
+            <input type="text" id="weekPrice" placeholder="$60.000" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+        <label for="toolImageFile">Foto de la Herramienta (Subir desde dispositivo)</label>
+        <input type="file" id="toolImageFile" accept="image/*">
+        </div>
+
+        <div class="form-group">
+        <label for="toolImage">O pegar URL directa de foto (opcional)</label>
+        <input type="url" id="toolImage" placeholder="https://ejemplo.com/foto.jpg">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="justify-content:center; margin-top:8px;">
+          <i class="fa-solid fa-plus"></i> Publicar Herramienta
+        </button>
+      </form>
+
+      <h4 style="margin-bottom:10px; font-size:0.95rem;">Herramientas Activas</h4>
+      <div id="adminToolsList"></div>
+    </div>
+  </div>
+
+  <!-- Archivo JS Independiente -->
+  <script src="script.js"></script>
+</body>
+</html>
