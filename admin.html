@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Carga - NG Alquileres</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="admin-page-body">
+
+  <header class="navbar">
+    <div class="container navbar-container">
+      <a href="index.html" class="logo-box">
+        <svg class="brand-logo" viewBox="0 0 320 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="10,20 130,20 68,100" fill="#424242"/>
+          <polygon points="68,100 130,20 130,100" fill="#FFC107"/>
+          <polygon points="80,20 200,20 200,100" fill="#F27A18"/>
+          <text x="215" y="92" font-family="'Poppins', sans-serif" font-weight="800" font-size="82" fill="currentColor">NG</text>
+        </svg>
+      </a>
+
+      <div class="nav-actions">
+        <button id="themeToggleBtn" class="action-btn" aria-label="Cambiar tema">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+        <a href="index.html" class="btn btn-secondary"><i class="fa-solid fa-arrow-left"></i> Volver al Sitio</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container admin-container">
+    <!-- PANTALLA DE ACCESO CON CLAVE -->
+    <section id="authBox" class="admin-card auth-card">
+      <h2 style="justify-content:center;"><i class="fa-solid fa-lock"></i> Acceso Administrador</h2>
+      <p style="text-align:center; color:var(--text-muted); margin-bottom:16px;">Ingresá el PIN de seguridad para gestionar el catálogo.</p>
+      
+      <div class="form-group" style="max-width:300px; margin:0 auto 16px;">
+        <input type="password" id="adminPinInput" placeholder="Ej:1234" style="text-align:center; font-size:1.1rem;">
+      </div>
+      <button type="button" id="loginAdminBtn" class="btn btn-primary" style="margin:0 auto; display:block;">
+        Ingresar al Panel
+      </button>
+    </section>
+
+    <!-- PANEL PRINCIPAL -->
+    <div id="adminMainContent" class="admin-main-content hidden">
+      <section class="admin-card">
+        <h2><i class="fa-solid fa-screwdriver-wrench"></i> Agregar / Editar Herramienta</h2>
+        
+        <form id="addToolForm" class="admin-form">
+          <div class="form-group">
+            <label for="toolName">Nombre de la Herramienta *</label>
+            <input type="text" id="toolName" placeholder="Ej: Rotomartillo SDS Max 1500W" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="toolBrand">Marca / Modelo *</label>
+              <input type="text" id="toolBrand" placeholder="Ej: Bosch GBH 5-40" required>
+            </div>
+            <div class="form-group">
+              <label for="toolCategory">Categoría *</label>
+              <select id="toolCategory" required>
+                <option value="electricas">Eléctricas</option>
+                <option value="maquinaria">Maquinaria</option>
+                <option value="andamios">Andamios</option>
+                <option value="limpieza">Limpieza</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="toolImageFile">Foto desde la Galería/Computadora</label>
+            <input type="file" id="toolImageFile" accept="image/*">
+          </div>
+
+          <div class="form-group">
+            <label for="toolImage">O URL de la foto (opcional)</label>
+            <input type="url" id="toolImage" placeholder="https://ejemplo.com/foto.jpg">
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="justify-content:center; margin-top:10px;">
+            <i class="fa-solid fa-plus"></i> Publicar Herramienta
+          </button>
+        </form>
+      </section>
+
+      <section class="admin-card">
+        <h2><i class="fa-solid fa-list-check"></i> Herramientas Activas en el Catálogo</h2>
+        <div id="adminToolsList"></div>
+      </section>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
