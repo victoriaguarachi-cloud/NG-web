@@ -53,7 +53,7 @@ function renderCustomerTools(category = 'todos') {
           <span class="tool-category">${tool.category}</span>
           <h3 class="tool-title">${tool.name}</h3>
           <p class="tool-model">Marca / Modelo: ${tool.brand || 's/d'}</p>
-          <a href="https://wa.me/5492254615250?text=${msg}" target="_blank" rel="noopener" class="btn btn-whatsapp" style="margin-top:auto;">
+          <a href="https://wa.me/5492254585601?text=${msg}" target="_blank" rel="noopener" class="btn btn-whatsapp" style="margin-top:auto;">
             <i class="fa-brands fa-whatsapp"></i> Consultar por WhatsApp
           </a>
         </div>
