@@ -1,39 +1,71 @@
 /* ==========================================================================
-   NG ALQUILERES - LÓGICA DE INTERACCIÓN Y CATÁLOGO INFORMATIVO (SIN PRECIOS)
+   NG ALQUILERES - LÓGICA DE INTERACCIÓN Y NUBE CON FIREBASE FIRESTORE
    ========================================================================== */
+
+// IMPORTAR MÓDULOS OFICIALES DE FIREBASE (v10)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { 
+  getFirestore, 
+  collection, 
+  getDocs, 
+  addDoc, 
+  doc, 
+  updateDoc, 
+  deleteDoc, 
+  onSnapshot 
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+// ⚠️ REEMPLAZÁ ESTOS DATOS CON TU CONFIGURACIÓN REAL DE FIREBASE CONSOLE
+const firebaseConfig = {
+  apiKey: "AIzaSyBLhju5q_ObCh91zixYRxBCJ8445N56dk8",
+  authDomain: "ng-web-30e6d.firebaseapp.com",
+  projectId: "ng-web-30e6d",
+  storageBucket: "ng-web-30e6d.firebasestorage.app",
+  messagingSenderId: "485316063976",
+  appId: "1:485316063976:web:67f50d6a94269f0d71cf5d",
+};
+
+// Inicializar Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const toolsCollection = collection(db, "herramientas");
 
 let editingToolId = null;
 const defaultImage = 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80';
 
-const initialTools = [
-  { id: 1, name: "Rotomartillo SDS Max 1500W", brand: "Bosch GBH 5-40 DCE", category: "electricas", image: "https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=800&q=80" },
-  { id: 2, name: "Cuerpo de Andamio Estándar", brand: "Tubular Profesional", category: "andamios", image: "https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?auto=format&fit=crop&w=800&q=80" },
-  { id: 3, name: "Hormigonera 130 Litros", brand: "DeMisa 3/4 HP", category: "maquinaria", image: "https://images.unsplash.com/photo-1581094288338-2314dddb7ece?auto=format&fit=crop&w=800&q=80" }
-];
-
-function getTools() {
-  const stored = localStorage.getItem('ng_tools');
-  if (!stored) {
-    localStorage.setItem('ng_tools', JSON.stringify(initialTools));
-    return initialTools;
-  }
-  return JSON.parse(stored);
-}
-
-function saveTools(tools) {
-  localStorage.setItem('ng_tools', JSON.stringify(tools));
-}
-
 // --------------------------------------------------------------------------
-// 1. DIBUJAR CATÁLOGO PÚBLICO (INDEX.HTML)
+// 1. SINCRONIZACIÓN EN TIEMPO REAL CON LA NUBE
 // --------------------------------------------------------------------------
+
+// Escuchar cambios en la base de datos en tiempo real
+let currentCategory = 'todos';
+let cachedTools = [];
+
+onSnapshot(toolsCollection, (snapshot) => {
+  cachedTools = snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }));
+
+  renderCustomerTools(currentCategory);
+  renderAdminTools();
+});
+
+// DIBUJAR CATÁLOGO PÚBLICO (INDEX.HTML)
 function renderCustomerTools(category = 'todos') {
+  currentCategory = category;
   const grid = document.getElementById('toolsGrid');
   if (!grid) return;
   grid.innerHTML = '';
 
-  const tools = getTools();
-  const filtered = category === 'todos' ? tools : tools.filter(t => t.category === category);
+  const filtered = category === 'todos' 
+    ? cachedTools 
+    : cachedTools.filter(t => t.category === category);
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '<p style="text-align:center; color:var(--text-muted); grid-column:1/-1;">No hay herramientas disponibles en esta categoría.</p>';
+    return;
+  }
 
   filtered.forEach(tool => {
     const msg = encodeURIComponent(`Hola NG Alquileres, quisiera consultar disponibilidad por: ${tool.name} (${tool.brand || 's/d'})`);
@@ -53,7 +85,7 @@ function renderCustomerTools(category = 'todos') {
           <span class="tool-category">${tool.category}</span>
           <h3 class="tool-title">${tool.name}</h3>
           <p class="tool-model">Marca / Modelo: ${tool.brand || 's/d'}</p>
-          <a href="https://wa.me/5492254585601?text=${msg}" target="_blank" rel="noopener" class="btn btn-whatsapp" style="margin-top:auto;">
+          <a href="https://wa.me/5492254615250?text=${msg}" target="_blank" rel="noopener" class="btn btn-whatsapp" style="margin-top:auto;">
             <i class="fa-brands fa-whatsapp"></i> Consultar por WhatsApp
           </a>
         </div>
@@ -63,29 +95,26 @@ function renderCustomerTools(category = 'todos') {
   });
 }
 
-// --------------------------------------------------------------------------
-// 2. DIBUJAR PANEL DE GESTIÓN (ADMIN.HTML)
-// --------------------------------------------------------------------------
+// DIBUJAR LISTA DE GESTIÓN (ADMIN.HTML)
 function renderAdminTools() {
   const list = document.getElementById('adminToolsList');
   if (!list) return;
   list.innerHTML = '';
-  const tools = getTools();
 
-  if (tools.length === 0) {
-    list.innerHTML = '<p style="color:var(--text-muted); font-size:0.85rem;">No hay herramientas registradas.</p>';
+  if (cachedTools.length === 0) {
+    list.innerHTML = '<p style="color:var(--text-muted); font-size:0.85rem;">No hay herramientas en la base de datos.</p>';
     return;
   }
 
-  tools.forEach(tool => {
+  cachedTools.forEach(tool => {
     const item = `
       <div class="admin-item">
         <span><strong>${tool.name}</strong> (${tool.brand || 's/d'})</span>
         <div class="admin-actions-btns">
-          <button type="button" class="btn-edit" onclick="startEditTool(${tool.id})">
+          <button type="button" class="btn-edit" onclick="startEditTool('${tool.id}')">
             <i class="fa-solid fa-pen-to-square"></i>
           </button>
-          <button type="button" class="btn-delete" onclick="deleteTool(${tool.id})">
+          <button type="button" class="btn-delete" onclick="deleteTool('${tool.id}')">
             <i class="fa-solid fa-trash"></i>
           </button>
         </div>
@@ -95,9 +124,12 @@ function renderAdminTools() {
   });
 }
 
+// --------------------------------------------------------------------------
+// 2. FUNCIONES DE ADMINISTRACIÓN
+// --------------------------------------------------------------------------
+
 window.startEditTool = function(id) {
-  const tools = getTools();
-  const tool = tools.find(t => String(t.id) === String(id));
+  const tool = cachedTools.find(t => t.id === id);
   if (!tool) return;
 
   editingToolId = tool.id;
@@ -117,17 +149,14 @@ window.startEditTool = function(id) {
   }
 };
 
-window.deleteTool = function(id) {
-  if (confirm('¿Seguro que querés eliminar esta herramienta del catálogo?')) {
-    let tools = getTools();
-    tools = tools.filter(t => String(t.id) !== String(id));
-    saveTools(tools);
-    
-    if (editingToolId === id) {
-      resetAdminForm();
+window.deleteTool = async function(id) {
+  if (confirm('¿Seguro que querés eliminar esta herramienta del catálogo global?')) {
+    try {
+      await deleteDoc(doc(db, "herramientas", id));
+      if (editingToolId === id) resetAdminForm();
+    } catch (err) {
+      alert('Error al eliminar: ' + err.message);
     }
-
-    renderAdminTools();
   }
 };
 
@@ -145,7 +174,7 @@ function resetAdminForm() {
   }
 }
 
-// SUBMIT FORMULARIO ADMIN
+// GUARDAR / ACTUALIZAR EN FIRESTORE
 const addToolForm = document.getElementById('addToolForm');
 if (addToolForm) {
   addToolForm.addEventListener('submit', async (e) => {
@@ -164,44 +193,39 @@ if (addToolForm) {
       });
     }
 
-    let tools = getTools();
+    const payload = {
+      name: document.getElementById('toolName').value,
+      brand: document.getElementById('toolBrand').value,
+      category: document.getElementById('toolCategory').value,
+      updatedAt: new Date().toISOString()
+    };
 
-    if (editingToolId !== null) {
-      tools = tools.map(t => {
-        if (String(t.id) === String(editingToolId)) {
-          return {
-            ...t,
-            name: document.getElementById('toolName').value,
-            brand: document.getElementById('toolBrand').value,
-            category: document.getElementById('toolCategory').value,
-            image: finalImageUrl !== '' ? finalImageUrl : t.image
-          };
-        }
-        return t;
-      });
-      alert('¡Herramienta actualizada con éxito!');
-    } else {
-      tools.push({
-        id: Date.now(),
-        name: document.getElementById('toolName').value,
-        brand: document.getElementById('toolBrand').value,
-        category: document.getElementById('toolCategory').value,
-        image: finalImageUrl
-      });
-      alert('¡Herramienta guardada con éxito!');
+    if (finalImageUrl !== '') {
+      payload.image = finalImageUrl;
     }
 
-    saveTools(tools);
-    resetAdminForm();
-    renderAdminTools();
+    try {
+      if (editingToolId !== null) {
+        await updateDoc(doc(db, "herramientas", editingToolId), payload);
+        alert('¡Herramienta actualizada en la nube!');
+      } else {
+        payload.createdAt = new Date().toISOString();
+        if (!payload.image) payload.image = defaultImage;
+        await addDoc(toolsCollection, payload);
+        alert('¡Herramienta publicada exitosamente en todo internet!');
+      }
+      resetAdminForm();
+    } catch (err) {
+      alert('Error al guardar en la nube: ' + err.message);
+    }
   });
 }
 
 // --------------------------------------------------------------------------
-// 3. EVENTOS GLOBALES
+// 3. EVENTOS DE INTERFAZ Y NAVEGACIÓN
 // --------------------------------------------------------------------------
 
-// LOGIN PARA ADMIN.HTML
+// LOGIN DE ADMIN
 const loginAdminBtn = document.getElementById('loginAdminBtn');
 if (loginAdminBtn) {
   loginAdminBtn.addEventListener('click', () => {
@@ -242,9 +266,4 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
     e.target.classList.add('active');
     renderCustomerTools(e.target.getAttribute('data-category'));
   });
-});
-
-// INICIALIZAR
-document.addEventListener('DOMContentLoaded', () => {
-  renderCustomerTools();
 });
